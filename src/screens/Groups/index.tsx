@@ -5,9 +5,11 @@ import { Header } from '@/components/Header';
 import { Container }from './styles';
 import { Highlight } from '@/components/Highlight';
 import { GroupCard } from '@/components/GroupCard';
+import { ListEmpty } from '@/components/ListEmpty';
+
 
 export function Groups() {
-  const [groups, setGroups] = useState<string[]>(['Fetchly Squad']);
+  const [groups, setGroups] = useState<string[]>([]);
   return (
     <Container>
       <Header />
@@ -23,6 +25,10 @@ export function Groups() {
           <GroupCard 
             title={item} 
           />
+        )}
+        contentContainerStyle={groups.length === 0 && { flex: 1 }}
+        ListEmptyComponent={() => (
+          <ListEmpty message="Nice to see you here! let's create the first team?" />
         )}
       />
     </Container>
