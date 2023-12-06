@@ -6,6 +6,7 @@ import { Container }from './styles';
 import { Highlight } from '@/components/Highlight';
 import { GroupCard } from '@/components/GroupCard';
 import { ListEmpty } from '@/components/ListEmpty';
+import { Button } from '@/components/Button';
 
 
 export function Groups() {
@@ -31,6 +32,7 @@ export function Groups() {
           <ListEmpty message="Nice to see you here! let's create the first team?" />
         )}
       />
+      <Button title='Create new team' />
     </Container>
   );
 }
