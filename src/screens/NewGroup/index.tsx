@@ -16,7 +16,9 @@ export function NewGroup(){
 				title="New Team"
 				subtitle="Add some good people"
 				/>
-				<Input />
+				<Input 
+				placeholder="Team name"
+				/>
 
 				<Button
 				title="Create"
