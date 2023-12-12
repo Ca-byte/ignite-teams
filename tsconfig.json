@@ -6,7 +6,8 @@
       "@/*": [
         "src/*"
       ]
-    }
+    },
+    "types": ["styled-components/native"]
   },
   "extends": "expo/tsconfig.base"
 }
