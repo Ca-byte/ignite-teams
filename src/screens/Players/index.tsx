@@ -1,10 +1,10 @@
-import { Input } from "../Input";
-import { Header } from "../Header";
-import { Highlight } from "../Highlight";
-import { ButtonIcon } from "../ButtonIcon";
+import { Input } from "../../components/Input";
+import { Header } from "../../components/Header";
+import { Highlight } from "../../components/Highlight";
+import { ButtonIcon } from "../../components/ButtonIcon";
 
 import { Container, Form } from "./styles";
-import { Filter } from "../Filter";
+import { Filter } from "../../components/Filter";
 
 
 export function Player(){
