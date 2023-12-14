@@ -3,11 +3,16 @@ import { Header } from "../../components/Header";
 import { Highlight } from "../../components/Highlight";
 import { ButtonIcon } from "../../components/ButtonIcon";
 
-import { Container, Form } from "./styles";
+import { Container, Form, HeaderList, NumberOfPlayers } from "./styles";
 import { Filter } from "../../components/Filter";
+import { FlatList } from "react-native";
+import { useState } from "react";
 
 
 export function Player(){
+	const [team, setTeam]= useState('Team A')
+	const [players, setPlayers]= useState([])
+
 	return(
 		<Container>
 			<Header showBackButton/>
@@ -27,10 +32,25 @@ export function Player(){
 					icon="add"
 				/>
 			</Form>
-			
-			<Filter 
-				title="Team A"
-			/>
+
+			<HeaderList>
+				<FlatList 
+					data={['Team A', 'Team B']}
+					keyExtractor={item => item}
+					renderItem={({ item })=> (
+					
+					<Filter 
+						title="Team A"
+						isActive={item === team}
+						onPress={() => setTeam(item)}
+					/>
+				)}
+				horizontal
+				/>
+				<NumberOfPlayers>
+					{players.length}
+				</NumberOfPlayers>
+			</HeaderList>
 		</Container>
 	)
 }
