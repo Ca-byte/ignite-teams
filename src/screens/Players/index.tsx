@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FlatList } from "react-native";
+import { ListEmpty } from "@/components/ListEmpty";
 
 import { Input } from "../../components/Input";
 import { Header } from "../../components/Header";
@@ -9,11 +10,12 @@ import { Highlight } from "../../components/Highlight";
 import { ButtonIcon } from "../../components/ButtonIcon";
 
 import { Container, Form, HeaderList, NumberOfPlayers } from "./styles";
+import { Button } from "@/components/Button";
 
 
 export function Player(){
 	const [team, setTeam]= useState('Team A')
-	const [players, setPlayers]= useState([])
+	const [players, setPlayers]= useState(['Agatha', 'Antonia', 'Dimitri', 'Davi', 'Vuk'])
 
 	return(
 		<Container>
@@ -62,7 +64,19 @@ export function Player(){
 				onRemove={()=> {}}
 				 />
 			)}
+			ListEmptyComponent={() => (
+				<ListEmpty message="Nobody yet! Why?" />
+			)}
+			showsHorizontalScrollIndicator={false}
+			contentContainerStyle={[
+				{ paddingBottom: 100 },
+				players.length === 0 && { flex: 1 }
+			]}
 			/>
+			<Button
+			title="Delete team"
+			type="SECONDARY"
+			 />
 		</Container>
 	)
 }
