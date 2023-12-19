@@ -5,12 +5,12 @@ import { ListEmpty } from "@/components/ListEmpty";
 import { Input } from "../../components/Input";
 import { Header } from "../../components/Header";
 import { Filter } from "../../components/Filter";
+import { Button } from "@/components/Button";
 import { PlayerCard } from "@/components/PlayerCard";
 import { Highlight } from "../../components/Highlight";
 import { ButtonIcon } from "../../components/ButtonIcon";
 
 import { Container, Form, HeaderList, NumberOfPlayers } from "./styles";
-import { Button } from "@/components/Button";
 
 
 export function Player(){
@@ -23,7 +23,7 @@ export function Player(){
 
 			<Highlight 
 				title="Team Name"
-				subtitle="Add people and select the team member"
+				subtitle="Add people and select the team members"
 			/>
 			<Form>
 
