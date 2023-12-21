@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { FlatList } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import { Header } from '@/components/Header';
 import { Button } from '@/components/Button';
@@ -11,6 +12,14 @@ import { Container }from './styles';
 
 export function Groups() {
   const [groups, setGroups] = useState<string[]>([]);
+
+  const navigation = useNavigation();
+
+  function handleNewGroup(){
+
+    navigation.navigate('new')
+  }
+
   return (
     <Container>
       <Header />
@@ -32,7 +41,9 @@ export function Groups() {
           <ListEmpty message="Nice to see you here! let's create the first team?" />
         )}
       />
-      <Button title='Create new team' />
+      <Button title='Create new team' 
+      onPress={handleNewGroup}
+      />
     </Container>
   );
 }
