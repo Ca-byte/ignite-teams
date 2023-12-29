@@ -9,6 +9,8 @@ import { Button } from "@/components/Button";
 import { Highlight } from "@/components/Highlight";
 
 import { Container, Content, Icon } from "./styles";
+import { AppError } from "@/utils/AppError";
+import { Alert } from "react-native";
 
 export function NewGroup(){
 	const navigation = useNavigation();
@@ -16,10 +18,18 @@ export function NewGroup(){
 
 	async function handleNewGroup(){
 		try {
+			if(group.trim().length === 0){
+				Alert.alert("New Group", "Inform the team name.");
+
+			}
 			await groupCreate(group);
 			navigation.navigate('players', { group });
 
 		}catch(error){
+			if(error instanceof AppError){
+				Alert.alert("New Group", error.message);
+			}else
+			Alert.alert("New Group", "Opss... It was not possible to create a new group!");
 			console.log(error)
 		}
 	}
