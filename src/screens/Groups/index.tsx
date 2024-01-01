@@ -31,6 +31,10 @@ export function Groups() {
     }
   }
 
+  function handleOpeGroup(group: string ){
+    navigation.navigate('players', { group })
+  }
+
   useFocusEffect(useCallback(()=> {
     console.log('rodou')
     fetchGroups();
@@ -50,6 +54,7 @@ export function Groups() {
         renderItem={({ item }) => (
           <GroupCard 
             title={item} 
+            onPress={() => handleOpeGroup(item)}
           />
         )}
         contentContainerStyle={groups.length === 0 && { flex: 1 }}
