@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FlatList } from "react-native";
+import { Alert, FlatList } from "react-native";
 import { useRoute } from "@react-navigation/native";
 
 import { Input } from "../../components/Input";
@@ -12,6 +12,9 @@ import { Highlight } from "../../components/Highlight";
 import { ButtonIcon } from "../../components/ButtonIcon";
 
 import { Container, Form, HeaderList, NumberOfPlayers } from "./styles";
+import { AppError } from "@/utils/AppError";
+import { playerAddByGroup } from "@/storage/player/playerAddByGroup";
+import { playersGetByGroup } from "@/storage/player/playersGetByGroup";
 type RouteParams = {
 	group: string;
 }
@@ -19,10 +22,40 @@ type RouteParams = {
 export function Player(){
 	const [team, setTeam]= useState('Team A')
 	const [players, setPlayers]= useState([])
+	const [newPlayerName, setNewPlayerName]= useState('')
 
 	const route = useRoute()
 
 	const { group } = route.params as RouteParams;
+
+	async function handleAddPlayer() {
+
+		if (newPlayerName.trim().length === 0){
+			return Alert.alert('New Player', 'Add a name of the newbie')
+		}
+
+		const newPlayer = {
+			name: newPlayerName,
+			team,
+		}
+
+		try {
+			await playerAddByGroup(newPlayer, group)
+
+			const players = await playersGetByGroup(group);
+			console.log(players)
+			
+		} catch (error) {
+			if (error instanceof AppError){
+				Alert.alert('New person', error.message);
+			} else {
+				console.log(error);
+				Alert.alert('New person', 'Not possible to add!')
+			}
+			
+		}
+		
+	}
 
 	return(
 		<Container>
@@ -35,44 +68,48 @@ export function Player(){
 			<Form>
 
 				<Input 
+					onChangeText={setNewPlayerName}
 					placeholder="Team player name"
 					autoCorrect={false}
 				/>
 
 				<ButtonIcon
 					icon="add"
+					onPress={handleAddPlayer}
 				/>
 			</Form>
 
 			<HeaderList>
 				<FlatList 
-					data={['Team A', 'Team B']}
+					data={['Team A', 'Team B', 'Team C']}
 					keyExtractor={item => item}
 					renderItem={({ item })=> (
 					
 					<Filter 
-						title="Team A"
+						title={item}
 						isActive={item === team}
 						onPress={() => setTeam(item)}
 					/>
 				)}
 				horizontal
 				/>
+
 				<NumberOfPlayers>
 					{players.length}
 				</NumberOfPlayers>
 			</HeaderList>
+
 			<FlatList 
-			data={players}
-			keyExtractor={item => item}
-			renderItem={({item})=> (
-				<PlayerCard 
-				name={item}
-				onRemove={()=> {}}
-				 />
-			)}
-			ListEmptyComponent={() => (
-				<ListEmpty message="Nobody yet! Why?" />
+				data={players}
+				keyExtractor={item => item}
+				renderItem={({item})=> (
+					<PlayerCard 
+					name={item}
+					onRemove={()=> {}}
+					/>
+				)}
+				ListEmptyComponent={() => (
+					<ListEmpty message="Nobody yet! Why?" />
 			)}
 			showsHorizontalScrollIndicator={false}
 			contentContainerStyle={[
