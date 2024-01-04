@@ -44,6 +44,7 @@ export function Player(){
 		try {
 			await playerAddByGroup(newPlayer, group)
 			fetchPlayersByTeam();
+			setNewPlayerName('');
 			
 		} catch (error) {
 			if (error instanceof AppError){
@@ -88,6 +89,7 @@ export function Player(){
 					onChangeText={setNewPlayerName}
 					placeholder="Team player name"
 					autoCorrect={false}
+					value={newPlayerName}
 				/>
 
 				<ButtonIcon
