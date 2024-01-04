@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Alert, FlatList } from "react-native";
 import { useRoute } from "@react-navigation/native";
 
@@ -16,6 +16,7 @@ import { AppError } from "@/utils/AppError";
 import { playerAddByGroup } from "@/storage/player/playerAddByGroup";
 import { playersGetByGroupAndTeam } from "@/storage/player/playersGetByGroupAndTeam";
 import { PlayerStorageDTO } from "@/storage/player/PlayerStorageDTO";
+import { TextInput } from "react-native";
 
 type RouteParams = {
 	group: string;
@@ -30,6 +31,8 @@ export function Player(){
 
 	const { group } = route.params as RouteParams;
 
+	const newPlayerNameInputRef = useRef<TextInput>(null)
+
 	async function handleAddPlayer() {
 
 		if (newPlayerName.trim().length === 0){
@@ -43,6 +46,7 @@ export function Player(){
 
 		try {
 			await playerAddByGroup(newPlayer, group)
+			newPlayerNameInputRef.current?.blur();
 			fetchPlayersByTeam();
 			setNewPlayerName('');
 			
@@ -86,10 +90,13 @@ export function Player(){
 			<Form>
 
 				<Input 
+					inputRef={newPlayerNameInputRef}
 					onChangeText={setNewPlayerName}
 					placeholder="Team player name"
 					autoCorrect={false}
 					value={newPlayerName}
+					onSubmitEditing={handleAddPlayer}
+					returnKeyType="done"
 				/>
 
 				<ButtonIcon
