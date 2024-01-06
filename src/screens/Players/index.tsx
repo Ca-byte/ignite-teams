@@ -17,6 +17,7 @@ import { playerAddByGroup } from "@/storage/player/playerAddByGroup";
 import { playersGetByGroupAndTeam } from "@/storage/player/playersGetByGroupAndTeam";
 import { PlayerStorageDTO } from "@/storage/player/PlayerStorageDTO";
 import { TextInput } from "react-native";
+import { playerRemoveByGroup } from "@/storage/player/playerRemoveByGroup";
 
 type RouteParams = {
 	group: string;
@@ -75,6 +76,19 @@ export function Player(){
 		}
 	}
 
+	async function handlePlayerRemove(playerName: string) {
+		try {
+			await playerRemoveByGroup(playerName, group);
+			fetchPlayersByTeam();
+
+		} catch (error) {
+			console.log(error)
+			Alert.alert('Remove person', 'It is not possible to delete this person')
+			
+		}
+		
+	}
+
 	useEffect(() => {
 		fetchPlayersByTeam();
 	},[team])
@@ -131,7 +145,7 @@ export function Player(){
 				renderItem={({item})=> (
 					<PlayerCard 
 					name={item.name}
-					onRemove={()=> {}}
+					onRemove={()=> {handlePlayerRemove(item.name)}}
 					/>
 				)}
 				ListEmptyComponent={() => (
