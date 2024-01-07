@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { Alert, FlatList } from "react-native";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 import { Input } from "@/components/Input";
 import { Header } from "@/components/Header";
@@ -18,6 +18,7 @@ import { playersGetByGroupAndTeam } from "@/storage/player/playersGetByGroupAndT
 import { PlayerStorageDTO } from "@/storage/player/PlayerStorageDTO";
 import { TextInput } from "react-native";
 import { playerRemoveByGroup } from "@/storage/player/playerRemoveByGroup";
+import { groupRemoveByName } from "@/storage/group/groupRemoveByName";
 
 type RouteParams = {
 	group: string;
@@ -29,6 +30,7 @@ export function Player(){
 	const [players, setPlayers]= useState<PlayerStorageDTO[]>([])
 
 	const route = useRoute()
+	const navigation = useNavigation();
 
 	const { group } = route.params as RouteParams;
 
@@ -88,6 +90,29 @@ export function Player(){
 		}
 		
 	}
+
+	async function groupRemove(){
+    try{
+      await groupRemoveByName(group);
+      navigation.navigate('groups');
+
+    }catch{
+      console.error();
+      Alert.alert('Remove group', 'Unable to remove group.');
+    }
+
+  }
+  
+  async function handleGroupRemove() {
+    Alert.alert(
+      'remove',
+      'Do you want to remove the group?',
+      [
+        { text: 'no', style: 'cancel'},
+        { text: 'yes', onPress: () => groupRemove()}
+      ]
+    );
+  }
 
 	useEffect(() => {
 		fetchPlayersByTeam();
@@ -158,8 +183,9 @@ export function Player(){
 			]}
 			/>
 			<Button
-			title="Delete team"
-			type="SECONDARY"
+				title="Delete team"
+				type="SECONDARY"
+				onPress={handleGroupRemove}
 			 />
 		</Container>
 	)
