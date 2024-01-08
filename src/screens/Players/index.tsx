@@ -19,22 +19,24 @@ import { PlayerStorageDTO } from "@/storage/player/PlayerStorageDTO";
 import { TextInput } from "react-native";
 import { playerRemoveByGroup } from "@/storage/player/playerRemoveByGroup";
 import { groupRemoveByName } from "@/storage/group/groupRemoveByName";
+import { Loading } from "@/components/Loading";
 
 type RouteParams = {
 	group: string;
 }
 
 export function Player(){
+	const [isLoading, setIsLoading]= useState(true);
 	const [team, setTeam]= useState('Team A')
 	const [newPlayerName, setNewPlayerName]= useState('')
 	const [players, setPlayers]= useState<PlayerStorageDTO[]>([])
+	const newPlayerNameInputRef = useRef<TextInput>(null)
 
 	const route = useRoute()
 	const navigation = useNavigation();
 
 	const { group } = route.params as RouteParams;
 
-	const newPlayerNameInputRef = useRef<TextInput>(null)
 
 	async function handleAddPlayer() {
 
@@ -67,9 +69,12 @@ export function Player(){
 
 	async function fetchPlayersByTeam(){
 		try {
+			setIsLoading(true);
+
 			const playersByTeam = await playersGetByGroupAndTeam(group, team);
 
 			setPlayers(playersByTeam);
+			setIsLoading(false);
 			
 		} catch (error) {
 			console.log(error);
@@ -134,6 +139,7 @@ export function Player(){
 					placeholder="Team player name"
 					autoCorrect={false}
 					value={newPlayerName}
+					//Use keyboard button
 					onSubmitEditing={handleAddPlayer}
 					returnKeyType="done"
 				/>
@@ -163,7 +169,9 @@ export function Player(){
 					{players.length}
 				</NumberOfPlayers>
 			</HeaderList>
-
+				{
+					isLoading ? <Loading /> : 
+				
 			<FlatList 
 				data={players}
 				keyExtractor={item => item.name}
@@ -182,6 +190,7 @@ export function Player(){
 				players.length === 0 && { flex: 1 }
 			]}
 			/>
+		}
 			<Button
 				title="Delete team"
 				type="SECONDARY"
